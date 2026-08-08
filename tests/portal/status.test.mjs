@@ -6,6 +6,7 @@ import { ISSUE_TARGETS } from "../../portal/issue-targets.mjs";
 const data = JSON.parse(
   await readFile(new URL("../../portal/data/status.json", import.meta.url), "utf8")
 );
+const styles = await readFile(new URL("../../portal/styles.css", import.meta.url), "utf8");
 
 test("publication approval and review timestamp move together", () => {
   assert.equal(Boolean(data.publication.reviewedAt), data.publication.approved);
@@ -38,4 +39,8 @@ test("LAB-002 monitors the workflow used to build the room", () => {
   assert.ok(item);
   assert.equal(item.status, "Review");
   assert.equal(item.agentStage, "1 Template");
+});
+
+test("hidden controls stay hidden when component styles set display", () => {
+  assert.match(styles, /\[hidden\]\s*{\s*display:\s*none\s*!important;/);
 });
