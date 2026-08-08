@@ -8,6 +8,7 @@ const data = JSON.parse(
 );
 const styles = await readFile(new URL("../../portal/styles.css", import.meta.url), "utf8");
 const index = await readFile(new URL("../../portal/index.html", import.meta.url), "utf8");
+const app = await readFile(new URL("../../portal/app.mjs", import.meta.url), "utf8");
 
 test("publication approval and review timestamp move together", () => {
   assert.equal(Boolean(data.publication.reviewedAt), data.publication.approved);
@@ -45,4 +46,10 @@ test("LAB-002 monitors the workflow used to build the room", () => {
 test("hidden controls stay hidden when component styles set display", () => {
   assert.match(styles, /\[hidden\]\s*{\s*display:\s*none\s*!important;/);
   assert.match(index, /styles\.css\?v=[0-9-]+/);
+});
+
+test("copy handoff has a fallback and deploys with cache-busted assets", () => {
+  assert.match(app, /document\.execCommand\("copy"\)/);
+  assert.match(app, /미리보기에서 직접 복사하세요/);
+  assert.match(index, /app\.mjs\?v=[0-9-]+/);
 });

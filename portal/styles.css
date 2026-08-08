@@ -25,6 +25,14 @@
   display: none !important;
 }
 
+.clipboard-fallback {
+  position: fixed;
+  top: 0;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+
 html {
   scroll-behavior: smooth;
 }

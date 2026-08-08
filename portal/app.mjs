@@ -204,8 +204,25 @@ function saveDraft() {
 }
 
 async function copyText(value, message) {
-  await navigator.clipboard.writeText(value);
-  showToast(message);
+  let copied = false;
+
+  try {
+    if (!navigator.clipboard?.writeText) throw new Error("Clipboard API unavailable.");
+    await navigator.clipboard.writeText(value);
+    copied = true;
+  } catch {
+    const fallback = document.createElement("textarea");
+    fallback.value = value;
+    fallback.readOnly = true;
+    fallback.className = "clipboard-fallback";
+    document.body.append(fallback);
+    fallback.select();
+    copied = document.execCommand("copy");
+    fallback.remove();
+  }
+
+  showToast(copied ? message : "클립보드 복사가 차단됐습니다. 미리보기에서 직접 복사하세요.");
+  return copied;
 }
 
 function slugify(value) {
@@ -260,13 +277,11 @@ function bindEvents() {
       showToast("Issue를 소유할 대상 프로젝트를 먼저 선택하세요.");
       return;
     }
-    try {
-      await navigator.clipboard.writeText(buildIssueContract(draft));
-      window.open(target.issueNewUrl, "_blank", "noopener,noreferrer");
-      showToast("Issue 계약을 복사했습니다. 열린 GitHub 화면에 붙여넣으세요.");
-    } catch {
-      showToast("클립보드 권한이 필요합니다. Issue 계약 복사를 먼저 사용하세요.");
-    }
+    const copied = await copyText(
+      buildIssueContract(draft),
+      "Issue 계약을 복사했습니다. 열린 GitHub 화면에 붙여넣으세요."
+    );
+    if (copied) window.open(target.issueNewUrl, "_blank", "noopener,noreferrer");
   });
   elements.filters.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-status]");
