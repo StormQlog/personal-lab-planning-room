@@ -12,7 +12,7 @@ const allowedTopLevel = new Set(["schemaVersion", "publication", "meta", "source
 const allowedPublication = new Set(["approved", "reviewedAt", "publicFields", "notice"]);
 const allowedMeta = new Set(["title", "description", "lastVerified"]);
 const allowedSources = new Set(["projectUrl", "planningUrl"]);
-const allowedTarget = new Set(["repository", "project", "planningUrl", "issueNewUrl"]);
+const allowedTarget = new Set(["repository", "project", "planningPath", "planningUrl"]);
 const allowedItem = new Set([
   "id",
   "project",
@@ -99,16 +99,19 @@ for (const [key, value] of Object.entries(data.sources)) {
 }
 
 const targetRepositories = new Set();
-assert(ISSUE_TARGETS.length === 6, "All six repository Issue targets must be declared.");
+assert(ISSUE_TARGETS.length === 6, "All six repository planning targets must be declared.");
 for (const [index, target] of ISSUE_TARGETS.entries()) {
   assertKeys(target, allowedTarget, `ISSUE_TARGETS[${index}]`);
-  assert(!targetRepositories.has(target.repository), `Duplicate issue target: ${target.repository}`);
+  assert(!targetRepositories.has(target.repository), `Duplicate planning target: ${target.repository}`);
   targetRepositories.add(target.repository);
-  assertGitHubUrl(target.planningUrl, `issueTargets[${index}].planningUrl`);
-  assertGitHubUrl(target.issueNewUrl, `issueTargets[${index}].issueNewUrl`);
+  const expectedPath = target.repository === "lab-hq"
+    ? "docs/portfolio/personal-lab.md"
+    : "docs/planning/index.md";
+  assert(target.planningPath === expectedPath, `ISSUE_TARGETS[${index}] has the wrong planning path.`);
+  assertGitHubUrl(target.planningUrl, `planningTargets[${index}].planningUrl`);
   assert(
-    new URL(target.issueNewUrl).pathname === `/StormQlog/${target.repository}/issues/new`,
-    `issueTargets[${index}] must route to its own repository.`
+    new URL(target.planningUrl).pathname === `/StormQlog/${target.repository}/blob/main/${expectedPath}`,
+    `planningTargets[${index}] must route to its own main planning source.`
   );
 }
 

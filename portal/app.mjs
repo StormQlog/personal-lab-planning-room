@@ -1,7 +1,5 @@
 import {
-  buildIssueContract,
-  buildPlanningMarkdown,
-  canPersistDraft,
+  buildCodexHandoff,
   filterItems,
   hasDraftContent,
   normalizeDraft,
@@ -9,8 +7,6 @@ import {
 } from "./planner-core.mjs";
 import { ISSUE_TARGETS } from "./issue-targets.mjs";
 
-const STORAGE_KEY = "personal-lab.planning-room.draft.v1";
-const localDraftPersistence = canPersistDraft(window.location.hostname);
 const STATUS_LABELS = {
   Ready: "준비됨",
   Doing: "진행 중",
@@ -37,12 +33,9 @@ const elements = {
   preview: document.querySelector("#markdown-preview"),
   saveState: document.querySelector("#save-state"),
   toast: document.querySelector("#toast"),
-  saveButton: document.querySelector("#save-draft"),
   clearButton: document.querySelector("#clear-draft"),
-  copyPlanningButton: document.querySelector("#copy-planning"),
-  copyIssueButton: document.querySelector("#copy-issue"),
-  downloadButton: document.querySelector("#download-planning"),
-  openIssueButton: document.querySelector("#open-issue")
+  copyHandoffButton: document.querySelector("#copy-handoff"),
+  downloadButton: document.querySelector("#download-handoff")
 };
 
 function readForm() {
@@ -54,6 +47,10 @@ function writeForm(draft) {
     const field = elements.form.elements.namedItem(key);
     if (field) field.value = value;
   }
+}
+
+function targetFor(draft) {
+  return ISSUE_TARGETS.find((target) => target.repository === draft.targetRepo);
 }
 
 function formatTimestamp(value) {
@@ -141,8 +138,8 @@ function createWorkCard(item) {
   link.href = item.url;
   link.target = "_blank";
   link.rel = "noreferrer";
-  link.textContent = "기준 Issue 보기 ↗";
-  link.setAttribute("aria-label", `${item.id} 기준 Issue 새 창에서 보기`);
+  link.textContent = "Private Issue · 로그인 필요 ↗";
+  link.setAttribute("aria-label", `${item.id} private Issue를 로그인한 새 창에서 보기`);
 
   article.append(top, title, summary, meta, link);
   return article;
@@ -156,19 +153,13 @@ function renderWorkItems() {
 
 function renderPreview() {
   state.draft = readForm();
-  elements.preview.textContent = buildPlanningMarkdown(state.draft);
-  if (!localDraftPersistence) {
-    elements.saveState.textContent = hasDraftContent(state.draft)
-      ? "공개 화면은 초안을 저장하지 않습니다. 복사하거나 .md로 내려받아 보관하세요."
-      : "새 아이디어를 자유롭게 적어보세요. 공개 화면은 초안을 저장하지 않습니다.";
-    return;
-  }
+  elements.preview.textContent = buildCodexHandoff(state.draft, targetFor(state.draft));
   elements.saveState.textContent = hasDraftContent(state.draft)
-    ? "로컬 미리보기에 아직 저장하지 않은 변경이 있을 수 있습니다."
-    : "새 아이디어를 자유롭게 적어보세요.";
+    ? "이 페이지에는 저장되지 않습니다. 요청문을 복사해 현재 Codex 작업에 붙여넣으세요."
+    : "아이디어를 입력한 뒤 Codex 작업 요청 하나로 넘기세요. 이 페이지에는 저장되지 않습니다.";
 }
 
-function renderIssueTargets() {
+function renderTargets() {
   const options = ISSUE_TARGETS.map((target) => {
     const option = document.createElement("option");
     option.value = target.repository;
@@ -176,31 +167,6 @@ function renderIssueTargets() {
     return option;
   });
   elements.targetRepo.append(...options);
-}
-
-function issueTargetFor(draft) {
-  return ISSUE_TARGETS.find((target) => target.repository === draft.targetRepo);
-}
-
-function loadDraft() {
-  if (!localDraftPersistence) return;
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
-    state.draft = normalizeDraft(JSON.parse(saved));
-    writeForm(state.draft);
-    elements.saveState.textContent = "이 브라우저에 저장된 초안을 불러왔습니다.";
-  } catch {
-    elements.saveState.textContent = "저장된 초안을 읽지 못했습니다. 새 초안으로 시작합니다.";
-  }
-}
-
-function saveDraft() {
-  if (!localDraftPersistence) return;
-  state.draft = readForm();
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.draft));
-  elements.saveState.textContent = "이 브라우저에만 저장했습니다. GitHub로 전송하지 않았습니다.";
-  showToast("로컬 초안을 저장했습니다.");
 }
 
 async function copyText(value, message) {
@@ -226,63 +192,59 @@ async function copyText(value, message) {
 }
 
 function slugify(value) {
-  const slug = String(value || "planning-candidate")
+  const slug = String(value || "codex-work-request")
     .normalize("NFKD")
     .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
     .replace(/^-|-$/g, "")
     .toLowerCase();
-  return slug || "planning-candidate";
+  return slug || "codex-work-request";
 }
 
-function downloadPlanning() {
+function requireTarget() {
   const draft = readForm();
-  const blob = new Blob([buildPlanningMarkdown(draft)], { type: "text/markdown;charset=utf-8" });
+  const target = targetFor(draft);
+  if (target) return { draft, target };
+  elements.targetRepo.focus();
+  showToast("작업을 소유할 대상 프로젝트를 먼저 선택하세요.");
+  return null;
+}
+
+function downloadHandoff() {
+  const selection = requireTarget();
+  if (!selection) return;
+  const blob = new Blob(
+    [buildCodexHandoff(selection.draft, selection.target)],
+    { type: "text/markdown;charset=utf-8" }
+  );
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `${slugify(draft.title)}.md`;
+  anchor.download = `${slugify(selection.draft.title)}-codex-request.md`;
   anchor.click();
   URL.revokeObjectURL(url);
-  showToast("Markdown 파일을 만들었습니다.");
+  showToast("Codex 작업 요청 Markdown을 만들었습니다.");
 }
 
 function bindEvents() {
   elements.form.addEventListener("submit", (event) => event.preventDefault());
   elements.form.addEventListener("input", renderPreview);
   elements.form.addEventListener("change", renderPreview);
-  elements.saveButton.addEventListener("click", saveDraft);
   elements.clearButton.addEventListener("click", () => {
-    const prompt = localDraftPersistence
-      ? "작성 중인 내용과 로컬 미리보기에 저장된 초안을 비울까요?"
-      : "작성 중인 내용을 비울까요? 저장되지 않은 내용은 복구할 수 없습니다.";
-    if (!window.confirm(prompt)) return;
-    if (localDraftPersistence) window.localStorage.removeItem(STORAGE_KEY);
+    if (!window.confirm("작성 중인 내용을 비울까요? 저장되지 않은 내용은 복구할 수 없습니다.")) return;
     state.draft = normalizeDraft();
     writeForm(state.draft);
     renderPreview();
-    showToast("초안을 비웠습니다.");
+    showToast("입력 내용을 비웠습니다.");
   });
-  elements.copyPlanningButton.addEventListener("click", () =>
-    copyText(buildPlanningMarkdown(readForm()), "Planning Markdown을 복사했습니다.")
-  );
-  elements.copyIssueButton.addEventListener("click", () =>
-    copyText(buildIssueContract(readForm()), "Issue 계약을 복사했습니다.")
-  );
-  elements.downloadButton.addEventListener("click", downloadPlanning);
-  elements.openIssueButton.addEventListener("click", async () => {
-    const draft = readForm();
-    const target = issueTargetFor(draft);
-    if (!target) {
-      elements.targetRepo.focus();
-      showToast("Issue를 소유할 대상 프로젝트를 먼저 선택하세요.");
-      return;
-    }
-    const copied = await copyText(
-      buildIssueContract(draft),
-      "Issue 계약을 복사했습니다. 열린 GitHub 화면에 붙여넣으세요."
+  elements.copyHandoffButton.addEventListener("click", async () => {
+    const selection = requireTarget();
+    if (!selection) return;
+    await copyText(
+      buildCodexHandoff(selection.draft, selection.target),
+      "Codex 작업 요청을 복사했습니다. 현재 Codex 작업에 붙여넣으세요."
     );
-    if (copied) window.open(target.issueNewUrl, "_blank", "noopener,noreferrer");
   });
+  elements.downloadButton.addEventListener("click", downloadHandoff);
   elements.filters.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-status]");
     if (!button) return;
@@ -297,15 +259,8 @@ function bindEvents() {
 }
 
 async function start() {
-  renderIssueTargets();
-  if (!localDraftPersistence) {
-    elements.saveButton.hidden = true;
-  }
-  loadDraft();
+  renderTargets();
   renderPreview();
-  if (localDraftPersistence && hasDraftContent(state.draft)) {
-    elements.saveState.textContent = "이 브라우저에 저장된 초안을 불러왔습니다.";
-  }
   bindEvents();
 
   try {
@@ -318,8 +273,8 @@ async function start() {
   } catch (error) {
     console.error(error);
     elements.publicationBadge.textContent = "STATUS SNAPSHOT · 불러오기 실패";
-    elements.lastVerified.textContent = "로컬 기획 도구는 계속 사용할 수 있습니다.";
-    elements.workItems.textContent = "진행상황을 불러오지 못했습니다. 기준 GitHub Project에서 확인해 주세요.";
+    elements.lastVerified.textContent = "Codex 작업 요청 생성은 계속 사용할 수 있습니다.";
+    elements.workItems.textContent = "진행상황을 불러오지 못했습니다. 로그인한 GitHub Project에서 확인해 주세요.";
   }
 }
 

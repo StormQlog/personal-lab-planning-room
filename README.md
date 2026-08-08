@@ -8,6 +8,10 @@ Public, generated view for the StormQlog Personal Lab planning workflow.
 - Delivery evidence: pull requests and `main`
 - Portfolio status: the linked GitHub Project and Issues
 
+The Page has one primary action: generate and copy a self-contained Codex work request. The user pastes that request into the current Codex task; Codex then checks the selected private repository for instructions and concurrent work before updating its planning Markdown or creating an execution Issue. The Page does not store the draft, call Codex, or write to GitHub directly.
+
+Linked Project, Issue, and planning sources are private. GitHub may display a 404 when the browser is not signed in as StormQlog; the public Page labels those links accordingly.
+
 This repository contains only the reviewed static artifact and its validation/deployment code. It is not the source of truth for private planning and must never contain credentials, tokens, personal data, original recordings, or private work material.
 
 ## Local validation

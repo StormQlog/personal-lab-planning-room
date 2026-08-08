@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Personal Lab의 기획, 실행, 검토 흐름을 한 화면에서 살펴보는 Planning Room.">
     <meta name="robots" content="noindex, nofollow">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self' https://github.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'">
     <title>Personal Lab · Planning Room</title>
-    <link rel="stylesheet" href="./styles.css?v=20260808-3">
+    <link rel="stylesheet" href="./styles.css?v=20260808-4">
   </head>
   <body>
     <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
@@ -26,22 +26,22 @@
         <a href="#workflow">워크플로우</a>
       </nav>
       <a class="header-link" href="https://github.com/users/StormQlog/projects/1" target="_blank" rel="noreferrer">
-        GitHub Project ↗
+        Private Project · 로그인 필요 ↗
       </a>
     </header>
 
     <main id="main-content">
       <section class="hero" id="top">
         <div class="hero__copy">
-          <p class="eyebrow">ONE ROOM · MANY SOURCES · CLEAR OWNERSHIP</p>
-          <h1>생각은 자유롭게.<br><em>실행은 추적 가능하게.</em></h1>
+          <p class="eyebrow">ONE ROOM · ONE HANDOFF · CLEAR OWNERSHIP</p>
+          <h1>생각은 자유롭게.<br><em>실행은 한 번에 넘기기.</em></h1>
           <p class="hero__lede">
-            기획자는 아이디어를 확장하고, 개발자는 실행 가능한 계약을 이어받습니다.
-            이 화면은 둘을 연결하지만 원본을 대신하지 않습니다.
+            이 방에서 아이디어를 적고 “Codex 작업 요청” 하나만 복사하세요.
+            Codex가 대상 저장소를 점검한 뒤 private 기획 Markdown과 실행 흐름을 이어받습니다.
           </p>
           <div class="hero__actions">
             <a class="button button--primary" href="#workspace">아이디어 시작하기</a>
-            <a class="button button--quiet" href="#pulse">현재 흐름 보기</a>
+            <a class="button button--quiet" href="#workflow">4단계 흐름 보기</a>
           </div>
         </div>
 
@@ -61,13 +61,18 @@
         </aside>
       </section>
 
+      <div class="access-note" role="note">
+        <strong>GitHub 연결은 private입니다.</strong>
+        <span>StormQlog로 로그인하지 않은 브라우저에서는 링크가 404로 보일 수 있습니다. 404가 곧 미구현을 뜻하지는 않습니다.</span>
+      </div>
+
       <section class="section section--pulse" id="pulse" aria-labelledby="pulse-title">
         <div class="section-heading">
           <div>
             <p class="eyebrow">PORTFOLIO PULSE</p>
             <h2 id="pulse-title">지금 어디까지 왔나요?</h2>
           </div>
-          <p>공개 허용 목록으로 만든 시점 스냅샷입니다. 상세 상태는 연결된 Issue와 Project가 기준입니다.</p>
+          <p>공개 허용 목록으로 만든 시점 스냅샷입니다. 상세 상태는 로그인 후 연결된 private Issue와 Project에서 확인합니다.</p>
         </div>
 
         <div class="metrics" id="metrics" aria-label="상태별 작업 수"></div>
@@ -88,10 +93,10 @@
       <section class="section section--workspace" id="workspace" aria-labelledby="workspace-title">
         <div class="section-heading section-heading--light">
           <div>
-            <p class="eyebrow">IDEA WORKSPACE</p>
-            <h2 id="workspace-title">마음껏 쓰고, 준비되면 실행으로 넘기세요.</h2>
+            <p class="eyebrow">IDEA → CODEX HANDOFF</p>
+            <h2 id="workspace-title">마음껏 쓰고, 요청 하나로 넘기세요.</h2>
           </div>
-          <p>공개 화면은 초안을 저장하거나 전송하지 않습니다. 보관하려면 직접 복사하거나 Markdown으로 내려받으세요.</p>
+          <p>이 페이지가 저장소를 직접 수정하지는 않습니다. 생성된 요청문을 현재 Codex 작업에 붙여넣으면 로컬 저장소의 기획 원본부터 처리합니다.</p>
         </div>
 
         <div class="workspace-grid">
@@ -99,7 +104,7 @@
             <label>
               <span>대상 프로젝트</span>
               <select name="targetRepo" id="target-repo" required>
-                <option value="">기획과 Issue를 소유할 저장소 선택</option>
+                <option value="">기획과 실행을 소유할 저장소 선택</option>
               </select>
             </label>
 
@@ -114,7 +119,7 @@
             </label>
 
             <details>
-              <summary>Issue로 전환할 준비가 됐다면 구조화하기</summary>
+              <summary>필요하면 실행 조건 추가하기</summary>
               <div class="structured-fields">
                 <label>
                   <span>사용자 가치</span>
@@ -135,15 +140,12 @@
               </div>
             </details>
 
-            <p class="save-state" id="save-state" aria-live="polite">새 아이디어를 자유롭게 적어보세요.</p>
+            <p class="save-state" id="save-state" aria-live="polite">아이디어를 입력한 뒤 Codex 작업 요청 하나로 넘기세요.</p>
 
             <div class="action-row">
-              <button class="button button--primary" id="save-draft" type="button">로컬 미리보기에 저장</button>
-              <button class="button button--quiet" id="copy-planning" type="button">Planning 복사</button>
-              <button class="button button--quiet" id="download-planning" type="button">.md 내려받기</button>
-              <button class="button button--quiet" id="copy-issue" type="button">Issue 계약 복사</button>
-              <button class="button button--outline" id="open-issue" type="button">계약 복사 + 빈 Issue 열기 ↗</button>
-              <button class="text-button" id="clear-draft" type="button">초안 비우기</button>
+              <button class="button button--primary" id="copy-handoff" type="button">Codex 작업 요청 복사</button>
+              <button class="button button--quiet" id="download-handoff" type="button">작업 요청 .md 내려받기</button>
+              <button class="text-button" id="clear-draft" type="button">입력 비우기</button>
             </div>
           </form>
 
@@ -151,9 +153,9 @@
             <div class="preview-panel__heading">
               <div>
                 <p class="eyebrow">GENERATED HANDOFF</p>
-                <h3 id="preview-title">Planning Markdown 미리보기</h3>
+                <h3 id="preview-title">Codex 작업 요청 미리보기</h3>
               </div>
-              <span>자동 생성 · 원본 아님</span>
+              <span>복사 전송 · 자동 실행 아님</span>
             </div>
             <pre id="markdown-preview" tabindex="0"></pre>
           </aside>
@@ -161,42 +163,41 @@
 
         <div class="privacy-note">
           <strong>Public draft boundary</strong>
-          <p>공개 Pages에서는 초안을 브라우저 저장소에 남기지 않습니다. 키·토큰·개인정보·비공개 업무정보를 입력하지 마세요. GitHub 버튼은 계약을 클립보드에 복사하고 빈 Issue 화면만 열며, URL로 초안을 전송하거나 Issue를 자동 생성하지 않습니다.</p>
+          <p>입력은 이 공개 Page에 저장되지 않고 버튼을 눌러도 GitHub로 전송되지 않습니다. 키·토큰·개인정보·비공개 업무정보는 입력하지 마세요. “복사” 후 사용자가 현재 Codex 작업에 붙여넣어야만 private planning Markdown 점검과 후속 작업이 시작됩니다.</p>
         </div>
       </section>
 
       <section class="section section--workflow" id="workflow" aria-labelledby="workflow-title">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">PLANNING → EXECUTION → LEARNING</p>
-            <h2 id="workflow-title">한 방향으로 흐르고, 다시 기획으로 돌아옵니다.</h2>
+            <p class="eyebrow">WRITE → HANDOFF → BUILD → LEARN</p>
+            <h2 id="workflow-title">이 페이지에서 시작해 기준 기록으로 돌아갑니다.</h2>
           </div>
-          <p>각 단계는 서로 다른 기준 기록을 사용합니다. 같은 내용을 여러 곳에서 직접 고치지 않습니다.</p>
+          <p>Page는 입력과 공개 상태를 보여주는 비기준 화면입니다. 실제 변경은 Codex가 각 저장소의 기존 계약과 충돌을 확인한 뒤 수행합니다.</p>
         </div>
 
         <ol class="workflow-lane">
-          <li><span>01</span><strong>Explore</strong><p>Chat과 이 화면의 작업 초안에서 아이디어를 넓힙니다.</p><small>자유 탐색</small></li>
-          <li><span>02</span><strong>Plan</strong><p>승인된 방향을 private Markdown에 반영합니다.</p><small>기획 원본</small></li>
-          <li><span>03</span><strong>Contract</strong><p>검증 가능한 범위와 완료 조건을 Issue로 만듭니다.</p><small>실행 계약</small></li>
-          <li><span>04</span><strong>Build &amp; Review</strong><p>브랜치에서 구현하고 PR에 결과와 검증을 남깁니다.</p><small>변경 증거</small></li>
-          <li><span>05</span><strong>Accept &amp; Learn</strong><p>승인된 결과를 main과 planning 상태에 반영합니다.</p><small>채택 상태</small></li>
+          <li><span>01</span><strong>Write</strong><p>대상 프로젝트를 고르고 자유롭게 아이디어를 적습니다.</p><small>공개 Page · 저장 안 함</small></li>
+          <li><span>02</span><strong>Codex handoff</strong><p>작업 요청을 복사해 Codex에 붙여넣습니다. Codex가 충돌을 점검하고 private planning Markdown을 갱신합니다.</p><small>기획 원본</small></li>
+          <li><span>03</span><strong>Issue &amp; Build</strong><p>실행 준비가 된 항목만 Issue 계약으로 만들고 branch에서 구현·검증합니다.</p><small>실행 계약과 PR</small></li>
+          <li><span>04</span><strong>Review &amp; Publish</strong><p>승인된 결과를 main과 Project에 반영하고 공개 허용 상태만 이 Page에 다시 게시합니다.</p><small>채택과 학습</small></li>
         </ol>
 
         <div class="source-links">
-          <a href="https://github.com/StormQlog/lab-hq/tree/main/docs" target="_blank" rel="noreferrer"><span>Planning</span>문서 입구 보기 ↗</a>
-          <a href="https://github.com/StormQlog/lab-hq/issues" target="_blank" rel="noreferrer"><span>Issues</span>실행 계약 보기 ↗</a>
-          <a href="https://github.com/StormQlog/lab-hq/pulls" target="_blank" rel="noreferrer"><span>Pull Requests</span>변경 증거 보기 ↗</a>
-          <a href="https://github.com/users/StormQlog/projects/1" target="_blank" rel="noreferrer"><span>Project</span>전체 진행상황 보기 ↗</a>
+          <a href="https://github.com/StormQlog/lab-hq/tree/main/docs" target="_blank" rel="noreferrer"><span>Private · Login</span>Planning 문서 입구 ↗</a>
+          <a href="https://github.com/StormQlog/lab-hq/issues" target="_blank" rel="noreferrer"><span>Private · Login</span>실행 Issue ↗</a>
+          <a href="https://github.com/StormQlog/lab-hq/pulls" target="_blank" rel="noreferrer"><span>Private · Login</span>변경 PR ↗</a>
+          <a href="https://github.com/users/StormQlog/projects/1" target="_blank" rel="noreferrer"><span>Private · Login</span>전체 Project ↗</a>
         </div>
       </section>
     </main>
 
     <footer>
       <p>Personal Lab Planning Room · Generated view, not a source record.</p>
-      <p>LAB-002 · Stage 1 Template prototype</p>
+      <p>LAB-003 · Single Codex handoff</p>
     </footer>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="./app.mjs?v=20260808-3"></script>
+    <script type="module" src="./app.mjs?v=20260808-4"></script>
   </body>
 </html>

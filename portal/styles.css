@@ -198,6 +198,22 @@ a {
   margin-top: 34px;
 }
 
+.access-note {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px clamp(22px, 7vw, 112px);
+  border-block: 1px solid var(--line);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 0.78rem;
+}
+
+.access-note strong {
+  flex: 0 0 auto;
+  color: var(--forest);
+}
+
 .button {
   display: inline-flex;
   min-height: 46px;
@@ -688,7 +704,7 @@ a {
 
 .workflow-lane {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   margin: 0;
   padding: 0;
   border-block: 1px solid var(--line);
@@ -857,6 +873,13 @@ footer {
   .hero {
     gap: 52px;
     padding-block: 62px;
+  }
+
+  .access-note {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+    padding-inline: 20px;
   }
 
   .hero h1 {
