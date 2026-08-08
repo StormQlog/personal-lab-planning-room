@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "publication": {
+    "approved": true,
+    "reviewedAt": "2026-08-08T20:31:57+09:00",
+    "publicFields": [
+      "id",
+      "project",
+      "repository",
+      "title",
+      "summary",
+      "status",
+      "type",
+      "agentStage",
+      "url"
+    ],
+    "notice": "Public-safe status fields approved by the project owner. Secrets and private planning content remain excluded."
+  },
+  "meta": {
+    "title": "Personal Lab Planning Room",
+    "description": "A generated view for planning, execution, and review.",
+    "lastVerified": "2026-08-08T20:31:57+09:00"
+  },
+  "sources": {
+    "projectUrl": "https://github.com/users/StormQlog/projects/1",
+    "planningUrl": "https://github.com/StormQlog/lab-hq/tree/main/docs"
+  },
+  "items": [
+    {
+      "id": "LAB-001",
+      "project": "Personal Lab HQ",
+      "repository": "lab-hq",
+      "title": "Integrated planning document layer",
+      "summary": "Create the shared planning entry points and conflict coordination contract.",
+      "status": "Doing",
+      "type": "Build",
+      "agentStage": "0 Manual",
+      "url": "https://github.com/StormQlog/lab-hq/issues/1"
+    },
+    {
+      "id": "ENG-UI-001",
+      "project": "English Pattern Coach",
+      "repository": "english-pattern-lab",
+      "title": "UI-first mock vertical slice",
+      "summary": "Validate the practice loop without microphone access or paid APIs.",
+      "status": "Doing",
+      "type": "Experiment",
+      "agentStage": "0 Manual",
+      "url": "https://github.com/StormQlog/english-pattern-lab/issues/1"
+    },
+    {
+      "id": "ENG-001",
+      "project": "English Pattern Coach",
+      "repository": "english-pattern-lab",
+      "title": "Realtime voice vertical slice contract",
+      "summary": "Define lifecycle, privacy, cost, and evaluation boundaries before Realtime work.",
+      "status": "Ready",
+      "type": "Experiment",
+      "agentStage": "0 Manual",
+      "url": "https://github.com/StormQlog/english-pattern-lab/issues/2"
+    },
+    {
+      "id": "LAB-002",
+      "project": "Personal Lab HQ",
+      "repository": "lab-hq",
+      "title": "Planning Room prototype",
+      "summary": "Combine a public-safe status view with a local-only planning draft bridge.",
+      "status": "Review",
+      "type": "Experiment",
+      "agentStage": "1 Template",
+      "url": "https://github.com/StormQlog/lab-hq/issues/3"
+    }
+  ]
+}
