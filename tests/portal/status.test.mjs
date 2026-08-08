@@ -36,10 +36,10 @@ test("each product cell routes planning handoff to its own Issue list", () => {
   }
 });
 
-test("LAB-002 monitors the workflow used to build the room", () => {
+test("LAB-002 records the completed public workflow", () => {
   const item = data.items.find((candidate) => candidate.id === "LAB-002");
   assert.ok(item);
-  assert.equal(item.status, "Review");
+  assert.equal(item.status, "Done");
   assert.equal(item.agentStage, "1 Template");
 });
 
