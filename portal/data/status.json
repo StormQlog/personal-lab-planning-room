@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "publication": {
     "approved": true,
-    "reviewedAt": "2026-08-08T22:10:17+09:00",
+    "reviewedAt": "2026-08-08T22:28:24+09:00",
     "publicFields": [
       "id",
       "project",
@@ -19,7 +19,7 @@
   "meta": {
     "title": "Personal Lab Planning Room",
     "description": "A generated view for planning, execution, and review.",
-    "lastVerified": "2026-08-08T22:10:17+09:00"
+    "lastVerified": "2026-08-08T22:28:24+09:00"
   },
   "sources": {
     "projectUrl": "https://github.com/users/StormQlog/projects/1",
@@ -76,7 +76,7 @@
       "repository": "lab-hq",
       "title": "Single Codex planning handoff",
       "summary": "Reduce the public planner to one self-contained Codex handoff with explicit private-link boundaries.",
-      "status": "Doing",
+      "status": "Done",
       "type": "Experiment",
       "agentStage": "1 Template",
       "url": "https://github.com/StormQlog/lab-hq/issues/9"

@@ -49,6 +49,13 @@ test("LAB-002 records the completed public workflow", () => {
   assert.equal(item.agentStage, "1 Template");
 });
 
+test("LAB-003 records the completed single Codex handoff", () => {
+  const item = data.items.find((candidate) => candidate.id === "LAB-003");
+  assert.ok(item);
+  assert.equal(item.status, "Done");
+  assert.equal(item.agentStage, "1 Template");
+});
+
 test("the public workspace exposes one primary Codex handoff", () => {
   assert.match(index, /id="copy-handoff"/);
   assert.match(index, /Codex 작업 요청 복사/);
