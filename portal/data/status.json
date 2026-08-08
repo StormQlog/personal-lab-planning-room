@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "publication": {
     "approved": true,
-    "reviewedAt": "2026-08-08T20:51:54+09:00",
+    "reviewedAt": "2026-08-08T22:10:17+09:00",
     "publicFields": [
       "id",
       "project",
@@ -19,7 +19,7 @@
   "meta": {
     "title": "Personal Lab Planning Room",
     "description": "A generated view for planning, execution, and review.",
-    "lastVerified": "2026-08-08T20:51:54+09:00"
+    "lastVerified": "2026-08-08T22:10:17+09:00"
   },
   "sources": {
     "projectUrl": "https://github.com/users/StormQlog/projects/1",
@@ -32,7 +32,7 @@
       "repository": "lab-hq",
       "title": "Integrated planning document layer",
       "summary": "Create the shared planning entry points and conflict coordination contract.",
-      "status": "Doing",
+      "status": "Done",
       "type": "Build",
       "agentStage": "0 Manual",
       "url": "https://github.com/StormQlog/lab-hq/issues/1"
@@ -69,6 +69,17 @@
       "type": "Experiment",
       "agentStage": "1 Template",
       "url": "https://github.com/StormQlog/lab-hq/issues/3"
+    },
+    {
+      "id": "LAB-003",
+      "project": "Personal Lab HQ",
+      "repository": "lab-hq",
+      "title": "Single Codex planning handoff",
+      "summary": "Reduce the public planner to one self-contained Codex handoff with explicit private-link boundaries.",
+      "status": "Doing",
+      "type": "Experiment",
+      "agentStage": "1 Template",
+      "url": "https://github.com/StormQlog/lab-hq/issues/9"
     }
   ]
 }
